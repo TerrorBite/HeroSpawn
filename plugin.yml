@@ -1,0 +1,8 @@
+name: HeroSpawn
+author: shadrxninga
+main: com.herocraftonline.shadrxninga.herospawn.HeroSpawn
+version: 0.2
+commands:
+    HEROSPAWN:
+        description: Teleports a player to a different location on their first login
+        usage: Usage /herospawn [set]
