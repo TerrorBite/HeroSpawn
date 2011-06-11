@@ -25,7 +25,9 @@ public class HeroSpawn extends JavaPlugin{
 	
 	public static final Logger log = Logger.getLogger("Minecraft");
 	//Permissions Vairiables
-	public static PermissionHandler permissionHandler;
+	public static PermissionHandler Permissions;
+	public boolean UsePermissions;
+
 
 	@Override
 	public void onDisable() {
@@ -34,7 +36,7 @@ public class HeroSpawn extends JavaPlugin{
 
 	@Override
 	public void onEnable() {
-		
+		setupPermissions();
 		new File(mainDirectory).mkdir();
 		if(!file.exists()){
 		            try {
@@ -70,6 +72,34 @@ public class HeroSpawn extends JavaPlugin{
         }
         return null;
     }
+	
+	private void setupPermissions() {
+	    Plugin test = this.getServer().getPluginManager().getPlugin("Permissions");
+	    if (HeroSpawn.Permissions == null) {
+	        if (test != null) {
+	            UsePermissions = true;
+	            HeroSpawn.Permissions = ((Permissions) test).getHandler();
+	            System.out.println("[HeroSpawn] Permissions system detected!");
+	        } else {
+	            log.info("Permission system not detected, defaulting to OP");
+	            UsePermissions = false;
+	        }
+	    }
+	}
+	
+	 public boolean canSetSpawn(Player p) {
+	        if (UsePermissions) {
+	            return HeroSpawn.Permissions.has(p, "herospawn.set");
+	        }
+	        return p.isOp();
+	    }
+	    public boolean canTP(Player p) {
+	        if (UsePermissions) {
+	            return HeroSpawn.Permissions.has(p, "herospawn.tp");
+	        }
+	        return p.isOp();
+	    }
+	    
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
     	
     	if (!(sender instanceof Player)) {
@@ -78,11 +108,11 @@ public class HeroSpawn extends JavaPlugin{
     	}
     	Player player = (Player)sender;
     	if (command.getName().equalsIgnoreCase("herospawn")) {
-    		if (!player.isOp()) {
-        		player.sendMessage(ChatColor.RED + "You don't have permission to do that!");
-        		return true;
-    		}
     		if(args.length==0){
+    			if (!canTP(player)) {
+            		player.sendMessage(ChatColor.RED + "You don't have permission to do that!");
+            		return true;
+        		}
     			double z = Double.parseDouble(read(player.getWorld().getName() + ".Z"));
     			double x = Double.parseDouble(read(player.getWorld().getName() + ".X"));
     			double y = Double.parseDouble(read(player.getWorld().getName() + ".Y"));
@@ -93,7 +123,11 @@ public class HeroSpawn extends JavaPlugin{
 	
     		}
     		if(args[0].equalsIgnoreCase("set")){
-        	    String x1 = Double.toString(player.getLocation().getX());
+    			if (!canSet(player)) {
+            		player.sendMessage(ChatColor.RED + "You don't have permission to do that!");
+            		return true;
+    			}
+    			String x1 = Double.toString(player.getLocation().getX());
         		String y1 = Double.toString(player.getLocation().getY());
         		String z1 = Double.toString(player.getLocation().getZ());
         		write(player.getWorld().getName() + ".X", x1);
