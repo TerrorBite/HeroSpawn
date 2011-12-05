@@ -3,9 +3,12 @@ package com.herocraftonline.shadrxninga.herospawn;
 import java.io.File;
 import java.util.logging.Logger;
 
+import net.milkbowl.vault.permission.Permission;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
 import org.bukkit.command.Command;
@@ -13,11 +16,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-import com.nijiko.permissions.PermissionHandler;
-import com.nijikokun.bukkit.Permissions.Permissions;
-import org.bukkit.plugin.Plugin;
-
 public class HeroSpawn extends JavaPlugin {
+	public static final String PERM_TP = "herospawn.tp";
+	public static final String PERM_SET = "herospawn.set";
 	static String mainDirectory = "plugins/HeroSpawn";
 	File file = new File( mainDirectory + File.separator + "spawnlocations.yml" );
 	// Set up Listener Classes
@@ -26,7 +27,7 @@ public class HeroSpawn extends JavaPlugin {
 
 	public static final Logger log = Logger.getLogger( "Minecraft" );
 	// Permissions Vairiables
-	public static PermissionHandler Permissions;
+	public static Permission permission = null;
 	public boolean UsePermissions;
 
 	@Override
@@ -79,30 +80,27 @@ public class HeroSpawn extends JavaPlugin {
 	}
 
 	private void setupPermissions () {
-		Plugin test = this.getServer().getPluginManager()
-				.getPlugin( "Permissions" );
-		if ( HeroSpawn.Permissions == null ) {
-			if ( test != null ) {
-				UsePermissions = true;
-				HeroSpawn.Permissions = ( (Permissions) test ).getHandler();
-				System.out.println( "[HeroSpawn] Permissions system detected!" );
-			} else {
-				log.info( "Permission system not detected, defaulting to OP" );
-				UsePermissions = false;
-			}
-		}
+        RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+        if (permissionProvider != null) {
+            permission = permissionProvider.getProvider();
+            UsePermissions = true;
+            System.out.println( "[HeroSpawn] Permissions system detected!" );
+        } else {
+        	UsePermissions = false;
+        	log.info( "Permission system not detected, defaulting to OP" );
+        }
 	}
 
 	public boolean canSetSpawn ( Player p ) {
 		if ( UsePermissions ) {
-			return HeroSpawn.Permissions.has( p, "herospawn.set" );
+			return permission.has( p, PERM_SET );
 		}
 		return p.isOp();
 	}
 
 	public boolean canTP ( Player p ) {
 		if ( UsePermissions ) {
-			return HeroSpawn.Permissions.has( p, "herospawn.tp" );
+			return permission.has( p, PERM_TP );
 		}
 		return p.isOp();
 	}
