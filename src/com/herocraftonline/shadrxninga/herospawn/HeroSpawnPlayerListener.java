@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class HeroSpawnPlayerListener extends PlayerListener {
 	public static final Logger log = Logger.getLogger( "Minecraft" );
@@ -55,4 +56,20 @@ public class HeroSpawnPlayerListener extends PlayerListener {
 		}
 	}
 
+	public void onPlayerRespawn ( PlayerRespawnEvent e ) {
+		Player p = e.getPlayer();
+		System.out.println("\"" + plugin.permission.getPrimaryGroup( p ) + "\"");
+		
+		if ( plugin.permission != null && 
+				plugin.permission.getPrimaryGroup( p ).equalsIgnoreCase( plugin.getGroup() ) ) {
+			double z = Double.parseDouble( plugin.read( p.getWorld().getName()
+					+ ".Z" ) );
+			double x = Double.parseDouble( plugin.read( p.getWorld().getName()
+					+ ".X" ) );
+			double y = Double.parseDouble( plugin.read( p.getWorld().getName()
+					+ ".Y" ) );
+			Location loc = new Location( p.getWorld(), x, y, z );
+			e.setRespawnLocation( loc );
+		}
+	}
 }

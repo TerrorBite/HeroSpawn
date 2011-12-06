@@ -27,7 +27,8 @@ public class HeroSpawn extends JavaPlugin {
 
 	public static final Logger log = Logger.getLogger( "Minecraft" );
 	// Permissions Vairiables
-	public static Permission permission = null;
+	public Permission permission = null;
+	private String group;
 	public boolean UsePermissions;
 
 	@Override
@@ -46,10 +47,13 @@ public class HeroSpawn extends JavaPlugin {
 				ex.printStackTrace();
 			}
 		} else {
+			group = read ("group");
 			PluginManager pm = getServer().getPluginManager();
 			pm.registerEvent( Event.Type.PLAYER_LOGIN, playerListener,
 					Event.Priority.Highest, this );
 			pm.registerEvent( Event.Type.PLAYER_JOIN, playerListener,
+					Event.Priority.Highest, this );
+			pm.registerEvent( Event.Type.PLAYER_RESPAWN, playerListener,
 					Event.Priority.Highest, this );
 			log.info( "[HeroSpawn] Version 0.2 Enabled" );
 		}
@@ -155,5 +159,9 @@ public class HeroSpawn extends JavaPlugin {
 			return true;
 		}
 		return false;
+	}
+
+	public String getGroup () {
+		return group;
 	}
 }
