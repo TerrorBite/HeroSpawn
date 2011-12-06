@@ -60,7 +60,7 @@ public class HeroSpawnPlayerListener extends PlayerListener {
 		Player p = e.getPlayer();
 		System.out.println("\"" + plugin.permission.getPrimaryGroup( p ) + "\"");
 		
-		if ( plugin.permission != null && 
+		if ( plugin.permission != null && plugin.getGroup() != null && 
 				plugin.permission.getPrimaryGroup( p ).equalsIgnoreCase( plugin.getGroup() ) ) {
 			double z = Double.parseDouble( plugin.read( p.getWorld().getName()
 					+ ".Z" ) );
