@@ -2,6 +2,7 @@ name: HeroSpawn
 author: shadrxninga
 main: com.herocraftonline.shadrxninga.herospawn.HeroSpawn
 version: 0.2
+depend: [Vault]
 commands:
     HEROSPAWN:
         description: Teleports a player to a different location on their first login

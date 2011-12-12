@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<project name="HeroSpawn" default="jar" basedir=".">
+	<property name="src" value="ant-source" />
+	<property name="output" value="dist" />
+
+	<target name="compile" depends="init">
+		<javac destdir="bin" debug="true" debuglevel="lines, vars, and source">
+			<src path="src" />
+			<classpath refid="libs" />
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile">
+		<jar destfile="dist/HeroSpawn.jar" compress="true" manifest="Manifest.mf">
+			<fileset file="plugin.yml" />
+			<fileset dir="bin" />
+		</jar>
+	</target>
+
+	<target name="init">
+		<mkdir dir="bin" />
+		<mkdir dir="dist" />
+	</target>
+
+	<target name="execute" depends="compile">
+		<java classname="com.herocraftonline.shadrxninga.herospawn" classpath="build/classes" />
+	</target>
+
+	<target name="clean">
+		<delete dir="bin" />
+		<delete dir="dist" />
+	</target>
+
+	<path id="libs">
+		<fileset dir="lib">
+			<include name="bukkit-1.0.0-SNAPSHOT.jar" />
+			<include name="Vault.jar" />
+		</fileset>
+	</path>
+</project>
