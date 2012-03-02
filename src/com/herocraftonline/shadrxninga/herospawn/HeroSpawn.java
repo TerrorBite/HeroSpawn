@@ -27,7 +27,7 @@ public class HeroSpawn extends JavaPlugin {
 
 	@Override
 	public void onDisable () {
-		log.info( "[HeroSpawn] Version 0.2 Disabled" );
+		log.info( "[HeroSpawn] Version 0.3 Disabled" );
 	}
 
 	@Override
