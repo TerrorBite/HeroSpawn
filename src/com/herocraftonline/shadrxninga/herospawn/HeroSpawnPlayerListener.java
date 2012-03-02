@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
@@ -22,6 +23,7 @@ public class HeroSpawnPlayerListener implements Listener {
 		this.plugin = plugin;
 	}
 
+	@EventHandler
 	public void onPlayerLogin ( PlayerLoginEvent e ) {
 		Player p = e.getPlayer();
 		String name = p.getName();
@@ -42,6 +44,7 @@ public class HeroSpawnPlayerListener implements Listener {
 		}
 	}
 
+	@EventHandler
 	public void onPlayerJoin ( PlayerJoinEvent e ) {
 		Player p = e.getPlayer();
 		String name = p.getName();
@@ -58,6 +61,7 @@ public class HeroSpawnPlayerListener implements Listener {
 		}
 	}
 
+	@EventHandler
 	public void onPlayerRespawn ( PlayerRespawnEvent e ) {
 		Player p = e.getPlayer();
 		System.out.println("\"" + plugin.permission.getPrimaryGroup( p ) + "\"");
