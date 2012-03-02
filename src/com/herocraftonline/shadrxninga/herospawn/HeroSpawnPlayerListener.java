@@ -11,6 +11,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
+// TODO actually add the @ListenerEvent annotations
+
 public class HeroSpawnPlayerListener implements Listener {
 	public static final Logger log = Logger.getLogger( "Minecraft" );
 	HashMap<String, Integer> login = new HashMap<String, Integer>();

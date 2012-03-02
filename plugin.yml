@@ -1,7 +1,7 @@
 name: HeroSpawn
 author: shadrxninga
 main: com.herocraftonline.shadrxninga.herospawn.HeroSpawn
-version: 0.2
+version: 0.3
 depend: [Vault]
 commands:
     HEROSPAWN:
