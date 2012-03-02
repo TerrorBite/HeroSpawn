@@ -6,12 +6,12 @@ import java.util.logging.Logger;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
-public class HeroSpawnPlayerListener extends PlayerListener {
+public class HeroSpawnPlayerListener implements Listener {
 	public static final Logger log = Logger.getLogger( "Minecraft" );
 	HashMap<String, Integer> login = new HashMap<String, Integer>();
 	private HeroSpawn plugin;
