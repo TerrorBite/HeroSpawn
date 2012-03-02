@@ -7,24 +7,18 @@ import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.config.Configuration;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class HeroSpawn extends JavaPlugin {
 	public static final String PERM_TP = "herospawn.tp";
 	public static final String PERM_SET = "herospawn.set";
 	static String mainDirectory = "plugins/HeroSpawn";
 	File file = new File( mainDirectory + File.separator + "spawnlocations.yml" );
-	// Set up Listener Classes
-	private final HeroSpawnPlayerListener playerListener = new HeroSpawnPlayerListener(
-			this );
-
 	public static final Logger log = Logger.getLogger( "Minecraft" );
 	// Permissions Vairiables
 	public Permission permission = null;
@@ -49,38 +43,30 @@ public class HeroSpawn extends JavaPlugin {
 		} else {
 			group = read ("group");
 			PluginManager pm = getServer().getPluginManager();
-			pm.registerEvent( Event.Type.PLAYER_LOGIN, playerListener,
-					Event.Priority.Highest, this );
-			pm.registerEvent( Event.Type.PLAYER_JOIN, playerListener,
-					Event.Priority.Highest, this );
-			pm.registerEvent( Event.Type.PLAYER_RESPAWN, playerListener,
-					Event.Priority.Highest, this );
-			log.info( "[HeroSpawn] Version 0.2 Enabled" );
+			pm.registerEvents( new HeroSpawnPlayerListener( this ), this );
+			log.info( "[HeroSpawn] Version 0.3 Enabled" );
 		}
 	}
 
 	public void write ( String root, Object x ) {
-		Configuration config = load();
-		config.setProperty( root, x );
-		config.save();
+		try {
+			this.getConfig().load( file );
+			this.getConfig().set( root, x );
+			this.getConfig().save( file );
+		} catch ( Exception e ) {
+			// TODO Handle this better?
+			e.printStackTrace();
+		} 
 	}
 
 	public String read ( String root ) {
-		Configuration config = load();
-		return config.getString( root );
-	}
-
-	public Configuration load () {
-
 		try {
-			Configuration config = new Configuration( file );
-			config.load();
-			return config;
-
+			this.getConfig().load( file );
 		} catch ( Exception e ) {
+			// TODO Handle this A LOT better
 			e.printStackTrace();
-		}
-		return null;
+		} 
+		return this.getConfig().getString( root );
 	}
 
 	private void setupPermissions () {
