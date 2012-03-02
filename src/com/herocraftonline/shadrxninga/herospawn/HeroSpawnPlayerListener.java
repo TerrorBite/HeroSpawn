@@ -6,12 +6,15 @@ import java.util.logging.Logger;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
-public class HeroSpawnPlayerListener extends PlayerListener {
+// TODO actually add the @ListenerEvent annotations
+
+public class HeroSpawnPlayerListener implements Listener {
 	public static final Logger log = Logger.getLogger( "Minecraft" );
 	HashMap<String, Integer> login = new HashMap<String, Integer>();
 	private HeroSpawn plugin;
@@ -20,6 +23,7 @@ public class HeroSpawnPlayerListener extends PlayerListener {
 		this.plugin = plugin;
 	}
 
+	@EventHandler
 	public void onPlayerLogin ( PlayerLoginEvent e ) {
 		Player p = e.getPlayer();
 		String name = p.getName();
@@ -40,6 +44,7 @@ public class HeroSpawnPlayerListener extends PlayerListener {
 		}
 	}
 
+	@EventHandler
 	public void onPlayerJoin ( PlayerJoinEvent e ) {
 		Player p = e.getPlayer();
 		String name = p.getName();
@@ -56,6 +61,7 @@ public class HeroSpawnPlayerListener extends PlayerListener {
 		}
 	}
 
+	@EventHandler
 	public void onPlayerRespawn ( PlayerRespawnEvent e ) {
 		Player p = e.getPlayer();
 		System.out.println("\"" + plugin.permission.getPrimaryGroup( p ) + "\"");
